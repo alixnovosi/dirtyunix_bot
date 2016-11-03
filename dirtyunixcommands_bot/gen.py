@@ -1,129 +1,84 @@
 import os
 import random
 
-from collections import defaultdict
+import util
 
 HERE = os.path.abspath(os.path.dirname(__file__))
-LEADER_FILE = os.path.join(HERE, "leader_cmds")
-FOLLOWER_FILE = os.path.join(HERE, "follower_cmds")
-
-GOOD_FILE = os.path.join(HERE, "good")
 
 
-def gen_dict():
-    """Generate dictionary from file."""
-
-    dict = defaultdict(list)
-
-    with open(GOOD_FILE) as f:
-
-        for line in f:
-            if line is None or line == "":
-                break
-
-            words = line.split()
-
-            first = words[0]
-            dict["$"].append(first)
-
-            for i, word in enumerate(words[1:]):
-                dict[words[i-1]].append(word)
-
-                if i-2 > 0:
-                    dict[tuple(words[i-2:i])].append(word)
-
-    return dict
-
-
-def gen_markov(dict=None):
-    """Generate a tweet by markov-chaining."""
-    if dict is None:
-        dict = gen_dict()
-
+def gen_grammar():
+    """Generate using some grammar rules."""
     phrase = []
-    last = random.choice([key for key in dict.keys() if len(key) > 1 and isinstance(key, tuple)])
 
-    phrase.extend(last)
+    VERB = "verbs"
+    NOUN = "nouns"
+    ADJEC = "adjectives"
+    ADV = "adverbs"
+    INTERJ = "interjections"
+    QUEST = "questions"
+    IMPLICIT_COMMA = ","
+    BREAK = ";"
+    END = "END"
+    START = "START"
 
-    for i in range(random.choice(range(7, 14))):
+    DEBUG = False
 
-        options = dict[last]
-        if options is None or options == []:
+    files = {VERB: os.path.join(HERE, "verbs"),
+             NOUN: os.path.join(HERE, "nouns"),
+             ADJEC: os.path.join(HERE, "adjectives"),
+             ADV: os.path.join(HERE, "adverbs"),
+             INTERJ: os.path.join(HERE, "interjections"),
+             QUEST: os.path.join(HERE, "questions")
+             }
+
+    follow_rules = {VERB: [ADJEC, NOUN],
+                    NOUN: [ADV, BREAK, END],
+                    ADJEC: [ADJEC, NOUN],
+                    ADV: [NOUN],
+                    INTERJ: [INTERJ, BREAK, END],
+                    START: [VERB, INTERJ, QUEST],
+                    QUEST: [ADJEC, NOUN]
+                    }
+
+    PHRASE_LEN = random.choice(range(30, 141))
+
+    type = START
+    done = False
+    while not done:
+        if DEBUG:
+            phrase.append("[{}]".format(type))
+
+        # Invisible tokens - only show if debugging.
+        # These both start a new sentence or phrase.
+        if type in [START, IMPLICIT_COMMA]:
+            type = random.choice(follow_rules[START])
+
+        elif type == END:
             break
 
-        new = tuple([last[-1], random.choice(options)])
+        elif type == BREAK:
+            phrase.append(BREAK)
+            type = START
 
-        phrase.extend(new)
+        else:
+            phrase.append(util.random_line(files[type]))
+            last = phrase[-1]
+            type = random.choice(list(filter(lambda x: x != last, follow_rules[type])))
 
-        last = new
+        # Try to keep under PHRASE_LEN.
+        total_len = len(" ".join(phrase))
+        if total_len > PHRASE_LEN:
+            break
 
-    return " ".join(phrase)
+    result = " ".join(phrase)
 
+    if result[-1] == BREAK:
+        result = result[:-1]
 
-def gen_naive_random():
-    """Generate a <= tweet-sized dirty command."""
+    # TODO need to handle breaking too late and having > PHRASE_LEN.
 
-    cmd = random_cmd()
-
-    # Periodically staple some commands together.
-    if random.choice(range(5)) == 2:
-        second_cmd = random_cmd()
-
-        return "; ".join([cmd, second_cmd])
-
-    else:
-        return cmd
-
-
-def random_cmd():
-    """Get a random dirty command."""
-    leader = random_leader()
-    following = random_followers()
-
-    return " ".join([leader, following])
-
-
-def random_leader():
-    """Get random command from leader commands file."""
-    return random_line(LEADER_FILE)
-
-
-def random_followers():
-    """Get random command(s) from leader commands file."""
-    count = random.choice(range(2, 5))
-    lines = []
-
-    while count > 0:
-        lines.append(random_line(FOLLOWER_FILE))
-        count -= 1
-
-    return " ".join(lines)
-
-
-def random_line(file_path):
-    """Get random line from a file."""
-    # Fancy alg from http://stackoverflow.com/a/35579149 to avoid loading full file.
-    line_num = 0
-    selected_line = ""
-    with open(file_path) as f:
-        while 1:
-            line = f.readline()
-            if not line:
-                break
-            line_num += 1
-            if random.uniform(0, line_num) < 1:
-                selected_line = line
-
-    return selected_line.strip()
+    return result
 
 if __name__ == "__main__":
-    dict = gen_dict()
-
-    print("Rand")
     for i in range(8):
-        print(gen_naive_random())
-
-    # print()
-    # print("markov")
-    # for i in range(8):
-    #     print(gen_markov(dict=dict))
+        print(gen_grammar())
