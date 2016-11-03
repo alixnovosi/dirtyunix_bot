@@ -1,84 +1,56 @@
-import os
+"""Object for generating random sentences according to some grammar rules."""
 import random
 
+import tokens
 import util
 
-HERE = os.path.abspath(os.path.dirname(__file__))
 
+def gen():
+    """Create random sentence."""
+    debug = False
 
-def gen_grammar():
-    """Generate using some grammar rules."""
     phrase = []
 
-    VERB = "verbs"
-    NOUN = "nouns"
-    ADJEC = "adjectives"
-    ADV = "adverbs"
-    INTERJ = "interjections"
-    QUEST = "questions"
-    IMPLICIT_COMMA = ","
-    BREAK = ";"
-    END = "END"
-    START = "START"
+    max_len = random.choice(range(30, 141))
+    sentence_len = 0
 
-    DEBUG = False
-
-    files = {VERB: os.path.join(HERE, "verbs"),
-             NOUN: os.path.join(HERE, "nouns"),
-             ADJEC: os.path.join(HERE, "adjectives"),
-             ADV: os.path.join(HERE, "adverbs"),
-             INTERJ: os.path.join(HERE, "interjections"),
-             QUEST: os.path.join(HERE, "questions")
-             }
-
-    follow_rules = {VERB: [ADJEC, NOUN],
-                    NOUN: [ADV, BREAK, END],
-                    ADJEC: [ADJEC, NOUN],
-                    ADV: [NOUN],
-                    INTERJ: [INTERJ, BREAK, END],
-                    START: [VERB, INTERJ, QUEST],
-                    QUEST: [ADJEC, NOUN]
-                    }
-
-    PHRASE_LEN = random.choice(range(30, 141))
-
-    type = START
-    done = False
-    while not done:
-        if DEBUG:
-            phrase.append("[{}]".format(type))
+    token = tokens.START
+    while True:
+        if debug:
+            phrase.append("[{}]".format(token))
 
         # Invisible tokens - only show if debugging.
-        # These both start a new sentence or phrase.
-        if type in [START, IMPLICIT_COMMA]:
-            type = random.choice(follow_rules[START])
+        # These both start a new phrase.
+        if token in [tokens.START, tokens.IMPLICIT_COMMA]:
+            token = random.choice(tokens.FOLLOW_RULES[tokens.START])
 
-        elif type == END:
+        # END is end.
+        elif token == tokens.END:
             break
 
-        elif type == BREAK:
-            phrase.append(BREAK)
-            type = START
+        # Explicit break - show break and start a new phrase.
+        elif token == tokens.BREAK:
+            phrase.append(tokens.BREAK)
+            sentence_len += len(tokens.BREAK) + 1
 
+            token = tokens.START
+
+        # Any other tokens.
         else:
-            phrase.append(util.random_line(files[type]))
-            last = phrase[-1]
-            type = random.choice(list(filter(lambda x: x != last, follow_rules[type])))
+            next = util.random_line(tokens.FILES[token])
 
-        # Try to keep under PHRASE_LEN.
-        total_len = len(" ".join(phrase))
-        if total_len > PHRASE_LEN:
-            break
+            # Stay below max length.
+            if len(next) + sentence_len + 1 > max_len:
+                break
 
-    result = " ".join(phrase)
+            else:
+                phrase.append(next)
+                sentence_len += len(next) + 1
+                token = random.choice(tokens.FOLLOW_RULES[token])
 
-    if result[-1] == BREAK:
-        result = result[:-1]
+    result = " ".join(phrase).strip()
 
-    # TODO need to handle breaking too late and having > PHRASE_LEN.
+    if result[-1] == tokens.BREAK:
+        result = result[:-1].strip()
 
     return result
-
-if __name__ == "__main__":
-    for i in range(8):
-        print(gen_grammar())
