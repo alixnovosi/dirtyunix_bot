@@ -11,10 +11,14 @@ DELAY = 3600
 if __name__ == "__main__":
     api = send.auth_and_get_api()
 
-    while True:
-        garbage = gen.gen()
-        print("Tweeting: {}".format(garbage))
+    with open("log", "w") as f:
+        while True:
+            garbage = gen.gen()
+            f.write("Tweeting: {}.\n".format(garbage))
+            f.flush()
 
-        send.send_tweet(api, garbage)
+            send.send_tweet(api, garbage)
 
-        time.sleep(DELAY)
+            f.write("Sleeping for {} seconds.\n".format(DELAY))
+            f.flush()
+            time.sleep(DELAY)
