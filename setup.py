@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 HERE = path.abspath(path.dirname(__file__))
 
 with open(path.join(HERE, "VERSION"), encoding="utf-8") as f:
-    VERSION = f.read()
+    VERSION = f.read().strip()
 
 setup(author="Andrew Michaud",
       author_email="bots@mail.andrewmichaud.com",
