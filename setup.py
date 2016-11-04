@@ -12,18 +12,18 @@ setup(author="Andrew Michaud",
       author_email="bots@mail.andrewmichaud.com",
 
       entry_points={
-          "console_scripts": ["dirtyunixcommands_bot = dirtyunixcommands_bot.__main__:main"]
+          "console_scripts": ["dirtyunix_bot = dirtyunix_bot.__main__:main"]
       },
 
       install_requires=["tweepy>=3.5"],
 
       license="BSD3",
 
-      name="dirtyunixcommands_bot",
+      name="dirtyunix_bot",
 
       packages=find_packages(),
 
       # Project"s main homepage
-      url="https://github.com/andrewmichaud/dirtyunixcommands_bot",
+      url="https://github.com/andrewmichaud/dirtyunix_bot",
 
       version=VERSION)
