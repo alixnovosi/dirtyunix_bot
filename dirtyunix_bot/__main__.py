@@ -2,6 +2,8 @@
 
 import time
 
+import tweepy
+
 import gen
 import send
 
@@ -17,7 +19,22 @@ if __name__ == "__main__":
             f.write("Tweeting: {}.\n".format(garbage))
             f.flush()
 
-            send.send_tweet(api, garbage)
+            try:
+                send.send_tweet(api, garbage)
+
+            except tweepy.error.TweepError as e:
+
+                f.write("Tweepy error!\n")
+                f.write("code: {}\n".format(e.code()))
+                f.write("message: {}\n".format(e.message()))
+                f.flush()
+
+                f.write("Unhandled error, breaking.\n")
+                f.flsuh()
+                break
+
+                if e.message == "Status is a duplicate.":
+                    continue
 
             f.write("Sleeping for {} seconds.\n".format(DELAY))
             f.flush()
