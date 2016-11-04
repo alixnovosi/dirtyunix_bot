@@ -2,7 +2,9 @@
 
 import os
 
+# Where do we store words?
 HERE = os.path.abspath(os.path.dirname(__file__))
+WORDS = os.path.join(HERE, "words")
 
 # Special tokens for start and end of sentences.
 END = "END"
@@ -29,12 +31,12 @@ BREAK = ";"
 
 # Files with random lines corresponding to those tokens.
 FILES = {
-    VERB: os.path.join(HERE, "verbs"),
-    NOUN: os.path.join(HERE, "nouns"),
-    ADJEC: os.path.join(HERE, "adjectives"),
-    ADV: os.path.join(HERE, "adverbs"),
-    INTERJ: os.path.join(HERE, "interjections"),
-    QUEST: os.path.join(HERE, "questions")
+    VERB: os.path.join(WORDS, "verbs"),
+    NOUN: os.path.join(WORDS, "nouns"),
+    ADJEC: os.path.join(WORDS, "adjectives"),
+    ADV: os.path.join(WORDS, "adverbs"),
+    INTERJ: os.path.join(WORDS, "interjections"),
+    QUEST: os.path.join(WORDS, "questions")
 }
 
 # Rules for moving from one token to another.
