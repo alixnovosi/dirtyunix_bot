@@ -1,5 +1,3 @@
-"""setuptools-based setup module for puckfetcher."""
-
 from os import path
 from setuptools import setup, find_packages
 
