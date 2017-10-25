@@ -1,8 +1,9 @@
 """Object for generating random sentences according to some grammar rules."""
 import random
 
+import botskeleton
+
 import tokens
-import util
 
 
 def gen():
@@ -17,7 +18,7 @@ def gen():
     token = tokens.START
     while True:
         if debug:
-            phrase.append("[{}]".format(token))
+            phrase.append(f"[{token}]")
 
         # Invisible tokens - only show if debugging.
         # These both start a new phrase.
@@ -37,7 +38,7 @@ def gen():
 
         # Any other tokens.
         else:
-            next = util.random_line(tokens.FILES[token])
+            next = botskeleton.random_line(tokens.FILES[token])
 
             # Stay below max length.
             if len(next) + sentence_len + 1 > max_len:
