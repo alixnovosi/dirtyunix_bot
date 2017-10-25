@@ -13,7 +13,7 @@ setup(author="Andrew Michaud",
           "console_scripts": ["dirtyunix_bot = dirtyunix_bot.__main__:main"]
       },
 
-      install_requires=["tweepy>=3.5"],
+      install_requires=["botskeleton>=1.0.4"],
 
       license="BSD3",
 
