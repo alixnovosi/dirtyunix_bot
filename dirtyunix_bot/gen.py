@@ -1,4 +1,5 @@
 """Object for generating random sentences according to some grammar rules."""
+
 import random
 
 import botskeleton

@@ -1,17 +1,17 @@
 """Tokens used by grammar generator."""
 
-import os
+from os import path
+
 
 # Where do we store words?
-HERE = os.path.abspath(os.path.dirname(__file__))
-WORDS = os.path.join(HERE, "words")
+HERE = path.abspath(path.dirname(__file__))
+WORDS = path.join(HERE, "words")
 
 # Special tokens for start and end of sentences.
 END = "END"
 START = "START"
 
-# Tokens that can appear in sentences.
-# Parts-of-speech things.
+# Tokens that can appear in sentences. Parts-of-speech things.
 VERB = "verbs"
 NOUN = "nouns"
 ADJEC = "adjectives"
@@ -31,12 +31,12 @@ BREAK = ";"
 
 # Files with random lines corresponding to those tokens.
 FILES = {
-    VERB: os.path.join(WORDS, "verbs"),
-    NOUN: os.path.join(WORDS, "nouns"),
-    ADJEC: os.path.join(WORDS, "adjectives"),
-    ADV: os.path.join(WORDS, "adverbs"),
-    INTERJ: os.path.join(WORDS, "interjections"),
-    QUEST: os.path.join(WORDS, "questions")
+    VERB: path.join(WORDS, "verbs"),
+    NOUN: path.join(WORDS, "nouns"),
+    ADJEC: path.join(WORDS, "adjectives"),
+    ADV: path.join(WORDS, "adverbs"),
+    INTERJ: path.join(WORDS, "interjections"),
+    QUEST: path.join(WORDS, "questions"),
 }
 
 # Rules for moving from one token to another.
@@ -49,5 +49,5 @@ FOLLOW_RULES = {
     ADV: [NOUN],
     INTERJ: [INTERJ, BREAK, END],
     START: [VERB, INTERJ, QUEST],
-    QUEST: [ADJEC, NOUN]
+    QUEST: [ADJEC, NOUN],
 }
