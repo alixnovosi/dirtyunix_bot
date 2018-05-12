@@ -8,7 +8,7 @@ import gen
 
 
 # Delay between tweets in seconds.
-DELAY = 3600
+DELAY = 7200
 
 
 if __name__ == "__main__":
