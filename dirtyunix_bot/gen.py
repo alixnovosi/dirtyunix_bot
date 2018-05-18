@@ -8,6 +8,21 @@ import tokens
 
 
 def gen():
+    FMK_ODDS = 3
+    """Create a tweet."""
+    if random.randint(0, 10) <= FMK_ODDS:
+        return fmk_gen()
+    else:
+        return sentence_gen()
+
+def fmk_gen():
+    """FMK gen."""
+    fnoun = botskeleton.random_line(tokens.FILES[tokens.NOUN])
+    mnoun = botskeleton.random_line(tokens.FILES[tokens.NOUN])
+    knoun = botskeleton.random_line(tokens.FILES[tokens.NOUN])
+    return f"fsck {fnoun} ; make {mnoun} ; kill {knoun}"
+
+def sentence_gen():
     """Create random sentence."""
     debug = False
 
