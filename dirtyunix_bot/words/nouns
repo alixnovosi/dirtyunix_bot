@@ -1,6 +1,8 @@
 catman
+cut man
 date
 ed
+env
 ex
 grog
 groups
@@ -12,6 +14,7 @@ man
 net
 sass
 scrot
+strings
 tail
 users
 view
