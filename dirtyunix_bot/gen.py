@@ -8,9 +8,9 @@ import tokens
 
 
 def gen():
-    FMK_ODDS = 3
+    FMK_ODDS = 0.10
     """Create a tweet."""
-    if random.randint(0, 10) <= FMK_ODDS:
+    if random.random() <= FMK_ODDS:
         return fmk_gen()
     else:
         return sentence_gen()
