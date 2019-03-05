@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Main class for bot."""
 
 import os.path as path
