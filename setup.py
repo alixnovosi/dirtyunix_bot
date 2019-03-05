@@ -7,13 +7,13 @@ with open(path.join(HERE, "VERSION"), encoding="utf-8") as f:
     VERSION = f.read().strip()
 
 setup(author="Andrew Michaud",
-      author_email="bots@mail.andrewmichaud.com",
+      author_email="dev@drew.life",
 
       entry_points={
           "console_scripts": ["dirtyunix_bot = dirtyunix_bot.__main__:main"]
       },
 
-      install_requires=["botskeleton>=2.0.5"],
+      install_requires=["botskeleton>=3.1.0"],
       python_requires=">=3.6",
 
       license="BSD3",
@@ -22,7 +22,6 @@ setup(author="Andrew Michaud",
 
       packages=find_packages(),
 
-      # Project"s main homepage
-      url="https://github.com/andrewmichaud/dirtyunix_bot",
+      url="https://github.com/alixnovosi/dirtyunix_bot",
 
       version=VERSION)
