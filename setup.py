@@ -13,7 +13,7 @@ setup(author="Andrew Michaud",
           "console_scripts": ["dirtyunix_bot = dirtyunix_bot.__main__:main"]
       },
 
-      install_requires=["botskeleton>=3.2.4"],
+      install_requires=["botskeleton>=3.3.0"],
       python_requires=">=3.6",
 
       license="BSD3",
